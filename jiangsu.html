@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/echarts.js"></script>
+    <script src="js/china.js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bmap.min.js"></script>
+</head>
+<body>
+<div id = "container" style="height:600px;width:1000px;"></div>
+<script>
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var app = {};
+function randomData() {
+return Math.round(Math.random()*1000);
+}
+option = null;
+myChart.showLoading();
+
+
+$.getJSON('json/jiangsu.json', function (geoJson) {
+myChart.hideLoading();
+echarts.registerMap('江苏', geoJson);
+
+
+myChart.setOption(option = {
+title: {
+text: '江苏省地图',
+subtext: 'Rina',
+left: 'center'
+},
+toolbox: {
+show: true,
+orient: 'vertical',
+left: 'right',
+top: 'center',
+feature: {
+dataView: {readOnly: false},
+restore: {},
+saveAsImage: {}
+}
+},
+visualMap: {
+min: 0,
+max: 1500,
+text:['High','Low'],
+realtime: false,
+calculable: true,
+inRange: {
+
+color: ['#e0ffff', '#006edd']
+}
+},
+series: [
+{
+name: '江苏省地图',
+type: 'map',
+mapType: '江苏', // 自定义扩展图表类型
+itemStyle:{
+normal:{label:{show:true}},
+emphasis:{label:{show:true}}
+},
+data:[
+    {name: '南京市', value: randomData()},
+    {name: '苏州市', value: randomData()},
+    {name: '无锡市', value: randomData()},
+    {name: '常州市', value: randomData()},
+    {name: '南通市', value: randomData()},
+    {name: '镇江市', value: randomData()},
+    {name: '盐城市', value: randomData()},
+    {name: '扬州市', value: randomData()},
+    {name: '淮安市', value: randomData()},
+    {name: '宿迁市', value: randomData()},
+    {name: '连云港市', value: randomData()},
+    {name: '徐州市', value: randomData()},
+    {name: '泰州市', value: randomData()},
+
+],
+// 自定义名称映射
+
+}
+]
+});
+});;
+if (option && typeof option === "object") {
+myChart.setOption(option, true);
+}
+
+
+</script>
+
+
+
+</body>
+</html>

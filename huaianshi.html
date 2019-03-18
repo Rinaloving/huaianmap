@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <script src="js/echarts.js"></script>
+    <script src="js/china.js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/bmap.min.js"></script>
+</head>
+<body>
+<div id = "container" style="height:600px;width:1000px;"></div>
+<script>
+    var dom = document.getElementById("container");
+    var myChart = echarts.init(dom);
+    var app = {};
+    function randomData() {
+        return Math.round(Math.random()*1000);
+    }
+    option = null;
+    myChart.showLoading();
+
+    var areadatas =  [{name: '涟水县', value: randomData()},
+            {name: '淮阴区', value: randomData()},
+    {name: '清河区', value: randomData()},
+    {name: '青浦区', value: randomData()},
+    {name: '淮安区', value: randomData()},
+    {name: '洪泽县', value: randomData()},
+    {name: '盱眙县', value: randomData()},
+    {name: '金湖县', value: randomData()}, ];
+    $(function(){
+       for(var p in areadatas){//遍历json数组时，这么写p为索引，0,1
+           // alert(areadatas[p].name);
+        }
+    });
+
+    $.getJSON('json/huaian.json', function (geoJson) {
+        myChart.hideLoading();
+        echarts.registerMap('淮安', geoJson);
+
+
+        myChart.setOption(option = {
+            title: {
+                text: '淮安市地图',
+                subtext: 'Rina',
+                left: 'center'
+            },
+            toolbox: {
+                show: true,
+                orient: 'vertical',
+                left: 'right',
+                top: 'center',
+                feature: {
+                    dataView: {readOnly: false},
+                    restore: {},
+                    saveAsImage: {}
+                }
+            },
+            visualMap: {
+                min: 0,
+                max: 1500,
+                text:['High','Low'],
+                realtime: false,
+                calculable: true,
+                inRange: {
+
+                    color: ['#FF83FA','#e0ffff', '#006edd']
+                }
+            },
+            series: [
+                {
+                    name: '淮安市地图',
+                    type: 'map',
+                    mapType: '淮安', // 自定义扩展图表类型
+                    itemStyle:{
+                        normal:{label:{show:true}},
+                        emphasis:{label:{show:true}}
+                    },
+                    data:areadatas,
+// 自定义名称映射
+
+                }
+            ]
+        });
+    });;
+    if (option && typeof option === "object") {
+        myChart.setOption(option, true);
+    }
+
+    myChart.on('click', function (params) {             //点击事件
+        if (params.componentType === 'series') {
+            var provinceName =params.name;
+            alert("嘤嘤嘤。。。，我是 "+provinceName); //弹出区县名
+
+        }
+    });
+
+</script>
+
+
+
+</body>
+</html>
